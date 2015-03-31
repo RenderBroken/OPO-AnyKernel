@@ -3,7 +3,7 @@
 
 ## AnyKernel setup
 # EDIFY properties
-kernel.string=AK Kernel Installer by ak@xda-developers
+kernel.string=Render Kernel by RenderBroken!
 do.devicecheck=1
 do.initd=1
 do.modules=1
@@ -163,23 +163,7 @@ backup_file default.prop;
 replace_string default.prop "ro.adb.secure=0" "ro.adb.secure=1" "ro.adb.secure=0";
 replace_string default.prop "ro.secure=0" "ro.secure=1" "ro.secure=0";
 
-# kernel tunables
 backup_file init.qcom-common.rc
-replace_line init.qcom-common.rc "write /sys/block/mmcblk0/queue/scheduler fiops" "    write /sys/block/mmcblk0/queue/scheduler deadline";
-replace_line init.qcom-common.rc "write /sys/block/mmcblk0/queue/scheduler row" "    write /sys/block/mmcblk0/queue/scheduler deadline";
-replace_line init.qcom-common.rc "write /sys/block/mmcblk0/bdi/read_ahead_kb 256" "    write /sys/block/mmcblk0/bdi/read_ahead_kb 128";
-replace_line init.qcom-common.rc "write /sys/block/mmcblk0/bdi/read_ahead_kb 512" "    write /sys/block/mmcblk0/bdi/read_ahead_kb 128";
-
-# interactive tunables
-replace_line init.qcom-common.rc "write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 90" "    write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 70";
-replace_line init.qcom-common.rc "write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 1190400" "    write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 1728000";
-replace_line init.qcom-common.rc "write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 1497600" "    write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 1728000";
-
-# cpu-boost tunables
-#replace_line init.qcom-common.rc "write /sys/module/cpu_boost/parameters/boost_ms 20" "    write /sys/module/cpu_boost/parameters/boost_ms 60";
-replace_line init.qcom-common.rc "write /sys/module/cpu_boost/parameters/sync_threshold 1728000" "    write /sys/module/cpu_boost/parameters/sync_threshold 1958400";
-replace_line init.qcom-common.rc "write /sys/module/cpu_boost/parameters/input_boost_freq 1497600" "    write /sys/module/cpu_boost/parameters/input_boost_freq 1728000";
-#replace_line init.qcom-common.rc "write /sys/module/cpu_boost/parameters/input_boost_ms 40" "    write /sys/module/cpu_boost/parameters/input_boost_ms 100";
 
 # panel and gamma
 replace_line init.qcom-common.rc "chown system graphics /sys/devices/virtual/graphics/fb0/panel_calibration" "    chown system system /sys/devices/virtual/graphics/fb0/panel_calibration";

@@ -1,0 +1,141 @@
+#!/system/bin/sh
+
+BB=/sbin/busybox
+
+############################
+# Custom Kernel Settings for Render Kernel!!
+#
+stop mpdecision
+
+############################
+# MSM_Hotplug Settings
+#
+echo 1 > /sys/module/msm_hotplug/min_cpus_online
+echo 2 > /sys/module/msm_hotplug/cpus_boosted
+echo 500 > /sys/module/msm_hotplug/down_lock_duration
+echo 2500 > /sys/module/msm_hotplug/boost_lock_duration
+echo 200 5:100 50:50 350:200 > /sys/module/msm_hotplug/update_rates
+echo 100 > /sys/module/msm_hotplug/fast_lane_load
+echo 1 > /sys/module/msm_hotplug/max_cpus_online_susp
+
+############################
+# CPU-Boost Settings
+#
+echo 1 > /sys/module/cpu_boost/parameters/boost_ms
+echo 1 > /sys/module/cpu_boost/parameters/input_boost_ms
+echo 0:1190400 1:1190400 2:1190400 3:1190400 > /sys/module/cpu_boost/parameters/input_boost_freq
+echo 1420800 > /sys/module/cpu_boost/parameters/sync_threshold
+echo 1 > /sys/module/cpu_boost/parameters/hotplug_boost
+echo 1 > /sys/module/cpu_boost/parameters/wakeup_boost
+
+############################
+# LMK Tweaks
+#
+#echo 2560,4096,8192,16384,24576,32768 > /sys/module/lowmemorykiller/parameters/minfree
+#echo 32 > /sys/module/lowmemorykiller/parameters/cost
+
+############################
+# Tweak Background Writeout
+#
+echo 200 > /proc/sys/vm/dirty_expire_centisecs
+echo 40 > /proc/sys/vm/dirty_ratio
+echo 5 > /proc/sys/vm/dirty_background_ratio
+echo 10 > /proc/sys/vm/swappiness
+
+############################
+# Power Effecient Workqueues (Enable for battery)
+#
+echo 1 > /sys/module/workqueue/parameters/power_efficient
+
+############################
+# MSM Limiter
+#
+echo 300000 > /sys/kernel/msm_limiter/suspend_min_freq_0
+echo 300000 > /sys/kernel/msm_limiter/suspend_min_freq_1
+echo 300000 > /sys/kernel/msm_limiter/suspend_min_freq_2
+echo 300000 > /sys/kernel/msm_limiter/suspend_min_freq_3
+echo 2457600 > /sys/kernel/msm_limiter/resume_max_freq_0
+echo 2457600 > /sys/kernel/msm_limiter/resume_max_freq_1
+echo 2457600 > /sys/kernel/msm_limiter/resume_max_freq_2
+echo 2457600 > /sys/kernel/msm_limiter/resume_max_freq_3
+echo 1728000 > /sys/kernel/msm_limiter/suspend_max_freq
+
+############################
+# Scheduler and Read Ahead
+#
+echo zen > /sys/block/mmcblk0/queue/scheduler
+echo 2048 > /sys/block/mmcblk0/bdi/read_ahead_kb
+
+############################
+# GPU Governor
+#
+echo 578000000 > /sys/devices/fdb00000.qcom,kgsl-3d0/devfreq/fdb00000.qcom,kgsl-3d0/max_freq
+
+############################
+# Governor Tunings
+#
+echo ondemand > /sys/kernel/msm_limiter/scaling_governor_0
+echo 95 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
+echo 50000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
+echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
+echo 4 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+echo 10 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential
+echo 75 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_multi_core
+echo 3 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential_multi_core
+echo 960000 > /sys/devices/system/cpu/cpufreq/ondemand/optimal_freq
+echo 960000 > /sys/devices/system/cpu/cpufreq/ondemand/sync_freq
+echo 85 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load
+
+echo interactive > /sys/kernel/msm_limiter/scaling_governor_0
+echo 20000 1400000:40000 1700000:20000 > /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+echo 90 > /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+echo 1190400 > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+echo 1 > /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+echo 85 1500000:90 1800000:70 > /sys/devices/system/cpu/cpufreq/interactive/target_loads
+echo 40000 > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+echo 30000 > /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+echo 100000 > /sys/devices/system/cpu/cpufreq/interactive/max_freq_hysteresis
+echo 30000 > /sys/devices/system/cpu/cpufreq/interactive/timer_slack
+
+echo impulse > /sys/kernel/msm_limiter/scaling_governor_0 
+echo 20000 1400000:40000 1700000:20000 > /sys/devices/system/cpu/cpufreq/impulse/above_hispeed_delay
+echo 95 > /sys/devices/system/cpu/cpufreq/impulse/go_hispeed_load
+echo 1190400 > /sys/devices/system/cpu/cpufreq/impulse/hispeed_freq
+echo 1 > /sys/devices/system/cpu/cpufreq/impulse/io_is_busy
+echo 85 1500000:90 1800000:70 > /sys/devices/system/cpu/cpufreq/impulse/target_loads
+echo 40000 > /sys/devices/system/cpu/cpufreq/impulse/min_sample_time
+echo 30000 > /sys/devices/system/cpu/cpufreq/impulse/timer_rate
+echo 100000 > /sys/devices/system/cpu/cpufreq/impulse/max_freq_hysteresis
+echo 30000 > /sys/devices/system/cpu/cpufreq/impulse/timer_slack
+echo 1 > /sys/devices/system/cpu/cpufreq/impulse/powersave_bias
+
+############################
+# Disable Debugging
+#
+echo "0" > /sys/module/kernel/parameters/initcall_debug;
+echo "0" > /sys/module/alarm_dev/parameters/debug_mask;
+echo "0" > /sys/module/binder/parameters/debug_mask;
+echo "0" > /sys/module/xt_qtaguid/parameters/debug_mask;
+echo "[Render-Kernel] disable debug mask" | tee /dev/kmsg
+
+############################
+# KCAL Tunings Thanks AK!
+#
+echo "256 256 256" > /sys/devices/platform/kcal_ctrl.0/kcal
+echo "35" > /sys/devices/platform/kcal_ctrl.0/kcal_min
+echo "1" > /sys/devices/platform/kcal_ctrl.0/kcal_enable
+echo "0" > /sys/devices/platform/kcal_ctrl.0/kcal_invert
+echo "275" > /sys/devices/platform/kcal_ctrl.0/kcal_sat
+echo "0" > /sys/devices/platform/kcal_ctrl.0/kcal_hue
+echo "251" > /sys/devices/platform/kcal_ctrl.0/kcal_val
+echo "258" > /sys/devices/platform/kcal_ctrl.0/kcal_cont
+echo "[Render-Kernel] kcal sgs amoled settings done" | tee /dev/kmsg
+
+############################
+# Clean up!
+#
+INITD_DIR=/system/etc/init.d
+
+rm -rf $INITD_DIR/01mpdecision
+rm -rf $INITD_DIR/00ak
+rm -rf $INITD_DIR/00tgm
