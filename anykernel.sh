@@ -155,8 +155,8 @@ dump_boot;
 cp -fp $patch/init.d/* $initd
 chmod -R 766 $initd
 
-# remove mpdecsion binary
-mv $bindir/mpdecision $bindir/mpdecision-rm
+# mpdecsion binary
+mv $bindir/mpdecision-rm $bindir/mpdecision
 
 # adb secure
 backup_file default.prop;
@@ -170,6 +170,9 @@ append_file init.bacon.rc "render-post_boot" init.bacon.patch;
 # panel and gamma
 backup_file init.qcom-common.rc
 replace_line init.qcom-common.rc "chown system graphics /sys/devices/virtual/graphics/fb0/panel_calibration" "    chown system system /sys/devices/virtual/graphics/fb0/panel_calibration";
+
+# Disable QCOM Thermal Driver
+insert_line init.qcom-common.rc "#Disable QCOM Thermal" after "service thermal-engine /system/bin/thermal-engine" "   #Disable QCOM Thermal\n   disabled\n"
 
 # add frandom compatibility
 backup_file ueventd.rc;

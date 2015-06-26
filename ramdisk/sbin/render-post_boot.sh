@@ -5,8 +5,8 @@ BB=/sbin/bb/busybox
 ############################
 # Custom Kernel Settings for Render Kernel!!
 #
-stop mpdecision
 echo "[Render-Kernel] Boot Script Started" | tee /dev/kmsg
+stop mpdecision
 
 ############################
 # MSM_Hotplug Settings
@@ -125,6 +125,11 @@ echo 1267200 > /sys/devices/system/cpu/cpufreq/smartmax/boost_freq
 #
 echo 2560,4096,8192,16384,24576,32768 > /sys/module/lowmemorykiller/parameters/minfree
 echo 32 > /sys/module/lowmemorykiller/parameters/cost
+
+############################
+# MISC Tweaks
+#
+echo 0 > /sys/kernel/sched/gentle_fair_sleepers
 
 ############################
 # Disable Debugging
