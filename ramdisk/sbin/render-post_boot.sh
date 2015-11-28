@@ -40,13 +40,6 @@ echo 10 > /proc/sys/vm/swappiness
 echo 50 > /proc/sys/vm/vfs_cache_pressure
 
 ############################
-# ZRAM Settings
-#
-#echo "lzo [lz4]" > /sys/block/zram0/comp_algorithm
-#echo 3 > /sys/block/zram0/max_comp_stream
-#echo 300 > /sys/devices/virtual/block/zram0/disksize
-
-############################
 # Power Effecient Workqueues (Enable for battery)
 #
 echo 1 > /sys/module/workqueue/parameters/power_efficient
@@ -129,12 +122,8 @@ echo 1497600 > /sys/devices/system/cpu/cpufreq/smartmax/boost_freq
 ############################
 # LMK Tweaks
 #
-# echo 1536,2048,4096,16384,28672,32768 > /sys/module/lowmemorykiller/parameters/minfree
-# echo 32 > /sys/module/lowmemorykiller/parameters/cost
-
-# Lets use Adaptive LMK For now!
-echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
-echo 53059 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+echo 1536,2048,4096,16384,28672,32768 > /sys/module/lowmemorykiller/parameters/minfree
+echo 32 > /sys/module/lowmemorykiller/parameters/cost
 
 ############################
 # MISC Tweaks
@@ -142,6 +131,8 @@ echo 53059 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
 echo 0 > /sys/kernel/sched/gentle_fair_sleepers
 echo 1 > /sys/module/adreno_idler/parameters/adreno_idler_active
 echo 1 > /dev/cpuctl/cpu.notify_on_migrate
+echo 1 > /sys/module/state_notifier/parameters/use_fb_notifier
+echo 1 > /sys/class/mmc_host/mmcX/clk_scaling/scale_down_in_low_wr_load
 
 ############################
 # Disable Debugging
