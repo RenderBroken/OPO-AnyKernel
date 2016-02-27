@@ -1,7 +1,5 @@
 #!/system/bin/sh
 
-BB=/sbin/bb/busybox
-
 ############################
 # Custom Kernel Settings for Render Kernel!!
 #
@@ -31,44 +29,6 @@ echo 1 > /sys/module/cpu_boost/parameters/hotplug_boost
 echo 1 > /sys/module/cpu_boost/parameters/wakeup_boost
 
 ############################
-# Tweak Background Writeout
-#
-echo 200 > /proc/sys/vm/dirty_expire_centisecs
-echo 40 > /proc/sys/vm/dirty_ratio
-echo 5 > /proc/sys/vm/dirty_background_ratio
-echo 10 > /proc/sys/vm/swappiness
-echo 50 > /proc/sys/vm/vfs_cache_pressure
-
-############################
-# Power Effecient Workqueues (Enable for battery)
-#
-echo 1 > /sys/module/workqueue/parameters/power_efficient
-
-############################
-# MSM Limiter
-#
-echo 300000 > /sys/kernel/msm_limiter/suspend_min_freq_0
-echo 300000 > /sys/kernel/msm_limiter/suspend_min_freq_1
-echo 300000 > /sys/kernel/msm_limiter/suspend_min_freq_2
-echo 300000 > /sys/kernel/msm_limiter/suspend_min_freq_3
-echo 2457600 > /sys/kernel/msm_limiter/resume_max_freq_0
-echo 2457600 > /sys/kernel/msm_limiter/resume_max_freq_1
-echo 2457600 > /sys/kernel/msm_limiter/resume_max_freq_2
-echo 2457600 > /sys/kernel/msm_limiter/resume_max_freq_3
-echo 1267200 > /sys/kernel/msm_limiter/suspend_max_freq
-
-############################
-# Scheduler and Read Ahead
-#
-echo zen > /sys/block/mmcblk0/queue/scheduler
-echo 1024 > /sys/block/mmcblk0/bdi/read_ahead_kb
-
-############################
-# GPU Governor
-#
-echo 578000000 > /sys/devices/fdb00000.qcom,kgsl-3d0/devfreq/fdb00000.qcom,kgsl-3d0/max_freq
-
-############################
 # Governor Tunings
 #
 echo ondemand > /sys/kernel/msm_limiter/scaling_governor_0
@@ -95,17 +55,6 @@ echo 100000 > /sys/devices/system/cpu/cpufreq/impulse/max_freq_hysteresis
 echo 30000 > /sys/devices/system/cpu/cpufreq/impulse/timer_slack
 echo 1 > /sys/devices/system/cpu/cpufreq/impulse/powersave_bias
 
-echo interactive > /sys/kernel/msm_limiter/scaling_governor_0
-echo 20000 1400000:40000 1700000:20000 > /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
-echo 90 > /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
-echo 1190400 > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
-echo 1 > /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
-echo 85 1500000:90 1800000:70 > /sys/devices/system/cpu/cpufreq/interactive/target_loads
-echo 40000 > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
-echo 30000 > /sys/devices/system/cpu/cpufreq/interactive/timer_rate
-echo 100000 > /sys/devices/system/cpu/cpufreq/interactive/max_freq_hysteresis
-echo 30000 > /sys/devices/system/cpu/cpufreq/interactive/timer_slack
-
 echo smartmax > /sys/kernel/msm_limiter/scaling_governor_0
 echo smartmax > /sys/kernel/msm_limiter/scaling_governor_1
 echo smartmax > /sys/kernel/msm_limiter/scaling_governor_2
@@ -118,21 +67,53 @@ echo 30 > /sys/devices/system/cpu/cpufreq/smartmax/min_cpu_load
 echo 1497600 > /sys/devices/system/cpu/cpufreq/smartmax/touch_poke_freq
 echo 1497600 > /sys/devices/system/cpu/cpufreq/smartmax/boost_freq
 
+echo interactive > /sys/kernel/msm_limiter/scaling_governor_0
+echo 20000 1400000:40000 1700000:20000 > /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+echo 90 > /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+echo 1190400 > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+echo 1 > /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+echo 85 1500000:90 1800000:70 > /sys/devices/system/cpu/cpufreq/interactive/target_loads
+echo 40000 > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+echo 30000 > /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+echo 100000 > /sys/devices/system/cpu/cpufreq/interactive/max_freq_hysteresis
+echo 30000 > /sys/devices/system/cpu/cpufreq/interactive/timer_slack
 
 ############################
-# LMK Tweaks
+# Scheduler and Read Ahead
 #
-echo 1536,2048,4096,16384,28672,32768 > /sys/module/lowmemorykiller/parameters/minfree
-echo 32 > /sys/module/lowmemorykiller/parameters/cost
+echo zen > /sys/block/mmcblk0/queue/scheduler
+echo 1024 > /sys/block/mmcblk0/bdi/read_ahead_kb
+
+############################
+# Adaptive LMK
+#
+# echo 1536,2048,4096,16384,28672,32768 > /sys/module/lowmemorykiller/parameters/minfree
+# echo 32 > /sys/module/lowmemorykiller/parameters/cost
+echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+echo 53059 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+echo 1 > /sys/module/process_reclaim/parameters/enable_process_reclaim
+echo 100 > /sys/module/process_reclaim/parameters/pressure_max
+echo 200 > /proc/sys/vm/dirty_expire_centisecs
+echo 20 > /proc/sys/vm/dirty_background_ratio
+echo 40 > /proc/sys/vm/dirty_ratio
+echo 0 > /proc/sys/vm/swappiness
+
+############################
+# Tweak Background Writeout
+#
+echo 20 > /proc/sys/vm/dirty_background_ratio
+echo 200 > /proc/sys/vm/dirty_expire_centisecs
+echo 40 > /proc/sys/vm/dirty_ratio
+echo 0 > /proc/sys/vm/swappiness
+echo 80 > /proc/sys/vm/vfs_cache_pressure
 
 ############################
 # MISC Tweaks
 #
-echo 0 > /sys/kernel/sched/gentle_fair_sleepers
-echo 1 > /sys/module/adreno_idler/parameters/adreno_idler_active
 echo 1 > /dev/cpuctl/cpu.notify_on_migrate
-echo 1 > /sys/module/state_notifier/parameters/use_fb_notifier
-echo 1 > /sys/class/mmc_host/mmcX/clk_scaling/scale_down_in_low_wr_load
+echo 1 > /sys/module/state_notifier/parameters/enabled
+echo 1 > /sys/module/workqueue/parameters/power_efficient
+echo 1 > /sys/android_touch/wake_gestures
 
 ############################
 # Disable Debugging
@@ -144,18 +125,12 @@ echo "0" > /sys/module/xt_qtaguid/parameters/debug_mask;
 echo "[Render-Kernel] disable debug mask" | tee /dev/kmsg
 
 ############################
-# Init.d Support
-# 
-/sbin/busybox run-parts /system/etc/init.d
-
-############################
 # SuperUser Tweaks (TESTING)
 # Allow untrusted apps to read from debugfs
 if [ -e /system/lib/libsupol.so ]; then
 /system/xbin/supolicy --live \
 	"allow untrusted_app debugfs file { open read getattr }" \
 	"allow untrusted_app sysfs_lowmemorykiller file { open read getattr }" \
-	"allow untrusted_app sysfs_usb_supply dir { search }" \
 	"allow untrusted_app persist_file dir { open read getattr }" \
 	"allow debuggerd gpu_device chr_file { open read getattr }" \
 	"allow netd netd capability fsetid" \
@@ -170,7 +145,12 @@ if [ -e /system/lib/libsupol.so ]; then
 	"allow drmserver theme_data_file file r_file_perms" \
 	"allow zygote system_file file write" \
 	"allow atfwd property_socket sock_file write" \
-	"allow debuggerd app_data_file dir search"
+	"allow debuggerd app_data_file dir search" \
+	"allow sensors diag_device chr_file { read write open ioctl }" \
+	"allow sensors sensors capability net_raw" \
+	"allow init kernel security setenforce" \
+	"allow netmgrd netmgrd netlink_xfrm_socket nlmsg_write" \
+	"allow netmgrd netmgrd socket { read write open ioctl }"
 fi;
 
 ############################
